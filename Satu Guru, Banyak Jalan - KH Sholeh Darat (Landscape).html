@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Satu Guru, Banyak Jalan - KH Sholeh Darat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&family=Noto+Naskh+Arabic:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-d:#0f2a25; --green-m:#17433b; --green-x:#0b1f1b;
+    --gold:#d9a441; --gold-d:#8a5a12; --cream:#f5efdc; --beige:#f2ead3;
+    --teal:#3fb19a; --ink:#17332d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden;font-family:Inter,system-ui,sans-serif}
+
+  /* Fixed 16:9 design canvas, scaled to fit the window */
+  #frame{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;overflow:hidden;border-radius:6px}
+
+  .scene{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .8s ease,visibility .8s;padding:72px 96px;display:flex;flex-direction:column;justify-content:center}
+  .scene.active{opacity:1;visibility:visible}
+  .scene.dark{background:var(--green-d);color:var(--cream)}
+  .scene.light{background:var(--beige);color:var(--ink)}
+  .scene.gold{background:var(--gold);color:var(--green-d)}
+  .scene.deep{background:var(--green-x);color:var(--cream)}
+
+  /* entrance animations */
+  .a{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease;transition-delay:var(--d,0s)}
+  .scene.active .a{opacity:1;transform:none}
+  .a.pop{transform:scale(.75)}
+  .scene.active .a.pop{transform:scale(1)}
+  .a.left{transform:translateX(-24px)}
+  .scene.active .a.left{transform:none}
+
+  .kicker{font-size:15px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
+  .dark .kicker,.deep .kicker{color:var(--gold)}
+  .light .kicker{color:var(--gold-d)}
+  .gold .kicker{color:var(--green-d)}
+  h2{font-family:'Playfair Display',Georgia,serif;font-weight:700;line-height:1.15;font-size:52px;margin-bottom:34px}
+  h3{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:24px;margin-bottom:10px}
+  p{font-size:19px;line-height:1.5}
+  p+p{margin-top:12px}
+  .src{position:absolute;left:96px;bottom:34px;font-size:14px;opacity:.7}
+  .card{background:rgba(255,255,255,.96);color:var(--ink);border-radius:16px;padding:24px 26px;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+  .dark .card,.deep .card{background:var(--green-m);color:var(--cream)}
+  .card p{font-size:18px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .gold-t{color:var(--gold)}
+  .big{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:84px;color:var(--gold-d);line-height:1}
+
+  .moon{position:absolute;top:50px;right:90px;width:44px;height:44px}
+
+  /* scene 1 */
+  .orbit{position:relative;width:440px;height:440px;flex:0 0 auto}
+  .node{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:3px solid var(--teal);background:var(--green-m);width:190px;height:190px}
+  .node b{font-family:'Playfair Display',Georgia,serif;font-size:24px;line-height:1.15}
+  .node small{font-size:14px;opacity:.85;margin-top:4px}
+  .node.center{background:var(--gold);color:var(--green-d);border-color:var(--gold);width:220px;height:220px;left:110px;top:200px}
+  .node.center b{color:var(--green-d);font-size:30px}
+  .node.n1{left:0;top:0}
+  .node.n2{right:0;top:0}
+
+  /* roadmap */
+  .track{position:relative;height:60px;margin:6px 0 30px}
+  .dot{position:absolute;top:10px;width:40px;height:40px;border-radius:50%;background:var(--gold);color:var(--green-d);font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,164,65,.6)}50%{box-shadow:0 0 0 12px rgba(217,164,65,0)}}
+  .scene.active .dot{animation:pulse 2.4s ease-in-out infinite}
+  @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .scene.active .float{animation:floatY 4s ease-in-out infinite}
+
+  .emblem{width:100%;height:110px;border:3px solid var(--gold);border-radius:60px 60px 10px 10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:36px;color:var(--gold);background:var(--green-d);margin-bottom:18px}
+  .tl{border-top:4px solid var(--gold);padding-top:14px}
+  .tl .yr{font-weight:700;font-size:24px;color:var(--gold)}
+  .tl p{font-size:17px}
+
+  /* controls */
+  .bar{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);width:0;z-index:5}
+  .controls{position:fixed;right:14px;bottom:12px;z-index:6;display:flex;gap:8px}
+  .controls button{background:rgba(0,0,0,.5);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:7px 14px;font:600 13px Inter,sans-serif;cursor:pointer}
+  .counter{position:fixed;left:14px;bottom:12px;z-index:6;color:#fff;font:600 13px Inter,sans-serif;opacity:.6}
+</style>
+</head>
+<body>
+<div id="frame">
+
+  <!-- 1. Fakta menarik -->
+  <section class="scene dark active" data-dur="9000">
+    <svg class="moon a pop" viewBox="0 0 50 50"><path d="M30 6a20 20 0 1 0 14 34A16 16 0 0 1 30 6z" fill="#d9a441"/><path d="M41 12l1.4 3.6 3.6 1.4-3.6 1.4L41 22l-1.4-3.6L36 17l3.6-1.4z" fill="#d9a441"/></svg>
+    <div class="kicker a">Fakta Menarik</div>
+    <div style="display:flex;gap:80px;align-items:center">
+      <div style="flex:1">
+        <h2 class="a" style="--d:.2s">Dua ormas Islam raksasa, satu guru yang sama.</h2>
+        <p class="a" style="--d:.5s"><b>NU</b> (1926) didirikan KH Hasyim Asy’ari. Survei 2022 memperkirakan anggotanya hampir 150 juta, sekitar 59% muslim Indonesia.</p>
+        <p class="a" style="--d:.8s"><b>Muhammadiyah</b> didirikan KH Ahmad Dahlan lebih dari satu dekade sebelum NU, dikenal sebagai sayap modernis Islam lewat beragam amal usaha.</p>
+        <p class="a" style="--d:1.1s">Keduanya pernah berguru pada <b>KH. Muhammad Sholeh bin Umar as-Samarani</b>, guru yang namanya tak sepopuler murid-muridnya.</p>
+      </div>
+      <div class="orbit">
+        <div class="node n1 a pop" style="--d:.4s"><b>NU</b><small>KH Hasyim Asy’ari</small></div>
+        <div class="node n2 a pop" style="--d:.6s"><b>Muhammadiyah</b><small>KH Ahmad Dahlan</small></div>
+        <div class="node center a pop float" style="--d:1s"><b>Mbah Sholeh Darat</b></div>
+      </div>
+    </div>
+    <div class="src a" style="--d:1.4s">Sumber: Tirto, NU Online</div>
+  </section>
+
+  <!-- 2. Siapa dia -->
+  <section class="scene light" data-dur="9000">
+    <div class="kicker a">Siapa Dia?</div>
+    <h2 class="a" style="--d:.15s;margin-bottom:26px">Mbah Sholeh Darat, putra pejuang Diponegoro</h2>
+    <div style="display:grid;grid-template-columns:200px 1fr 1fr;gap:40px;align-items:start">
+      <div class="a pop" style="--d:.3s;width:200px;height:250px;border:3px solid var(--gold-d);border-radius:100px 100px 14px 14px;background:#ebdfc2;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:38px;color:var(--gold-d);font-weight:700">MSD</div>
+      <div class="a left" style="--d:.5s"><div class="big">±1820</div><p style="font-size:18px">Lahir di Kedung Cumpleng, Mayong, Jepara. Setahun dengan Syaikh Kholil Bangkalan; tahun pastinya masih perkiraan.</p></div>
+      <div class="a" style="--d:.7s;text-align:right"><div class="big">1903</div><p style="font-size:18px">Wafat 28 Ramadhan 1321 H (18 Desember), dimakamkan di Bergota, Semarang.</p></div>
+    </div>
+    <div class="a" style="--d:.9s;display:flex;align-items:center;gap:16px;margin:24px 0 28px">
+      <div style="flex:1;height:4px;background:var(--gold)"></div><span style="font-weight:600;color:var(--gold-d)">83 tahun</span><div style="flex:1;height:4px;background:var(--gold)"></div>
+    </div>
+    <div class="grid2">
+      <div class="card a" style="--d:1.1s"><h3>Putra pejuang</h3><p>Ayahnya, Kyai Umar, tangan kanan Pangeran Diponegoro di pesisir utara Jawa pada Perang Jawa 1825–1830.</p></div>
+      <div class="card a" style="--d:1.3s"><h3>Nama dan julukan</h3><p>“Darat” merujuk kawasan pesisir Semarang tempat ia tinggal dan membangun masjid. Kiai-kiai muda Jawa menjulukinya “Ghazali Kecil”.</p></div>
+    </div>
+    <div class="src a" style="--d:1.5s;color:var(--ink)">Sumber: tafsiralquran.id, jurnal Walisongo, Tirto</div>
+  </section>
+
+  <!-- 3. Roadmap -->
+  <section class="scene dark" data-dur="10000">
+    <div class="kicker a">Roadmap Perjalanan Ilmu</div>
+    <h2 class="a" style="--d:.15s">Dari Jepara ke Mekah, kembali ke Darat</h2>
+    <div class="track a" style="--d:.4s">
+      <div style="position:absolute;top:30px;left:20px;right:20px;border-top:3px dashed var(--gold);opacity:.7"></div>
+      <div class="dot" style="left:0">1</div>
+      <div class="dot" style="left:33%;animation-delay:.5s">2</div>
+      <div class="dot" style="left:66%;animation-delay:1s">3</div>
+      <div class="dot" style="right:0;animation-delay:1.5s">4</div>
+    </div>
+    <div class="grid4">
+      <div class="card a" style="--d:.6s"><h3 class="gold-t">Jepara · ±1820</h3><p>Belajar dasar agama pada ayahnya, Kyai Umar, di lingkungan keluarga pejuang Diponegoro.</p></div>
+      <div class="card a" style="--d:.9s"><h3 class="gold-t">Jawa Tengah</h3><p>Tafsir Jalalain pada Raden H. Muhammad Sholeh bin Asnawi (Kudus), nahwu-sharaf pada Kiai Ishak (Damaran), falak pada Kiai Abdullah Baquni.</p></div>
+      <div class="card a" style="--d:1.2s"><h3 class="gold-t">Mekah · hingga ±1870</h3><p>Berguru pada Sayyid Ahmad Zaini Dahlan, mufti Syafi’iyyah dan guru Nawawi al-Bantani serta Kholil Bangkalan. Ia diizinkan mengajar di sana.</p></div>
+      <div class="card a" style="--d:1.5s"><h3 class="gold-t">Darat, Semarang</h3><p>Memimpin pesantren di Kampung Darat dan menyambungkan jaringan ulama Haramain dengan ulama Jawa.</p></div>
+    </div>
+    <div class="src a" style="--d:1.8s">Sumber: tafsiralquran.id, Tirto, Kompas, ejournal UIN Walisongo</div>
+  </section>
+
+  <!-- 4. Kelas legendaris -->
+  <section class="scene gold" data-dur="10000">
+    <div class="kicker a">Kelas Legendaris</div>
+    <h2 class="a" style="--d:.15s">Kelas yang melahirkan dua ormas raksasa</h2>
+    <div class="grid4">
+      <div class="card a pop" style="--d:.4s"><div class="emblem">HA</div><h3 style="color:var(--gold-d)">KH Hasyim Asy’ari</h3><p style="color:var(--cream)">Pendiri NU dan pengasuh Tebuireng, Jombang. Menggerakkan perlawanan 10 November.</p></div>
+      <div class="card a pop" style="--d:.6s"><div class="emblem">AD</div><h3 style="color:var(--gold-d)">KH Ahmad Dahlan</h3><p style="color:var(--cream)">Pendiri Muhammadiyah di Yogyakarta. Bersahabat dengan Hasyim Asy’ari sejak sama-sama menuntut ilmu.</p></div>
+      <div class="card a pop" style="--d:.8s"><div class="emblem">RK</div><h3 style="color:var(--gold-d)">RA Kartini</h3><p style="color:var(--cream)">Terkesan mendengar tafsir Al-Fatihah berbahasa Jawa. Riwayat menyebut ia meminta Al-Qur’an diterjemahkan.</p></div>
+      <div class="card a pop" style="--d:1s"><div class="emblem">+</div><h3 style="color:var(--gold-d)">Ulama lain</h3><p style="color:var(--cream)">Mahfudh Termas, Idris Jamsaren, Bisri Syansuri, dan Raden Asnawi Kudus.</p></div>
+    </div>
+    <p class="a" style="--d:1.3s;margin-top:32px;font-style:italic;font-family:'Playfair Display',serif;font-size:24px">Disebut “embahnya para ulama di Jawa” oleh KH Ahmad Hadlor Ihsan.</p>
+    <div class="src a" style="--d:1.5s">Sumber: NU Online, Tirto</div>
+  </section>
+
+  <!-- 5. Terobosan -->
+  <section class="scene light" data-dur="10000">
+    <div class="kicker a">Terobosan</div>
+    <h2 class="a" style="--d:.15s">Faidhur Rahman: tafsir Jawa pertama</h2>
+    <div style="display:grid;grid-template-columns:480px 1fr;gap:36px;align-items:stretch">
+      <div class="a pop float" style="--d:.3s;background:var(--green-d);color:var(--cream);border-radius:16px;padding:40px 28px;text-align:center;display:flex;flex-direction:column;justify-content:center">
+        <div style="font-family:'Noto Naskh Arabic',serif;font-size:84px;color:var(--gold);line-height:1.35">فيض<br>الرحمن</div>
+        <div style="font-family:'Playfair Display',serif;font-weight:700;color:var(--gold);font-size:28px;margin:14px 0">1312 H / 1894 M</div>
+        <p style="font-size:16px;opacity:.9">Bahasa Jawa, aksara pegon (Arab-Jawa), bercorak isyari</p>
+      </div>
+      <div style="display:grid;gap:18px">
+        <div class="card a left" style="--d:.5s"><h3>Untuk umat awam</h3><p>Tafsir pertama di Nusantara berbahasa Jawa dan beraksara pegon, dibuat agar mereka yang tak paham Arab tetap bisa memahami makna Al-Qur’an.</p></div>
+        <div class="card a left" style="--d:.8s"><h3>Kisah Kartini</h3><p>Konon Kartini terkesan pada tafsir Al-Fatihah dan meminta penjelasan berbahasa Jawa; kitab ini dihadiahkan di pernikahannya. Ini riwayat keluarga, dan ada catatan kritis soal usia Kartini.</p></div>
+        <div class="card a left" style="--d:1.1s"><h3>Belum rampung</h3><p>Baru sekitar 13 juz, karena beliau wafat sebelum menuntaskannya.</p></div>
+      </div>
+    </div>
+    <div class="src a" style="--d:1.4s;color:var(--ink)">Sumber: NU Online, tafsiralquran.id</div>
+  </section>
+
+  <!-- 6. Karya -->
+  <section class="scene dark" data-dur="10000">
+    <div class="kicker a">Karya</div>
+    <h2 class="a" style="--d:.15s"><span class="big" style="color:var(--gold);font-size:1.15em;margin-right:12px">12</span> kitab berbahasa Jawa untuk umat awam</h2>
+    <div class="grid2">
+      <div class="card a" style="--d:.4s"><h3 class="gold-t">Fikih dan ibadah</h3><p>Majmu’ah Syari’ah al-Kafiyah (hukum syariat untuk orang awam), Lathaif at-Thaharah, Manasik Haji, Asrar as-Shalah.</p></div>
+      <div class="card a" style="--d:.6s"><h3 class="gold-t">Tasawuf dan akhlak</h3><p>Munjiyat disarikan dari Ihya Ulumuddin al-Ghazali. Al-Hikam menjelaskan karya Ibnu Atha’illah. Juga Minhaj al-Atqiya’.</p></div>
+      <div class="card a" style="--d:.8s"><h3 class="gold-t">Akidah dan ilmu Qur’an</h3><p>Sabil al-‘Abid menerjemahkan Jauhar at-Tauhid. Mursyid al-Wajiz membahas ilmu Al-Qur’an. Berpaham Asy’ari dan Maturidi.</p></div>
+      <div class="card a" style="--d:1s"><h3 class="gold-t">Tafsir dan sirah</h3><p>Faidhur Rahman sebagai karya tafsir utamanya, serta Hadits al-Mi’raj tentang perjalanan Nabi.</p></div>
+    </div>
+    <div class="src a" style="--d:1.3s">Sumber: tafsiralquran.id, NU Online</div>
+  </section>
+
+  <!-- 7. Perjuangan -->
+  <section class="scene light" data-dur="9000">
+    <div class="kicker a">Perjuangan</div>
+    <h2 class="a" style="--d:.15s">Perlawanan senyap lewat pena dan ilmu</h2>
+    <div class="grid2">
+      <div class="card a pop" style="--d:.3s;background:var(--green-d);color:var(--cream)"><h3 class="gold-t">Pena, bukan pedang</h3><p>Tidak mengangkat senjata, tetapi membangun nasionalisme lewat gerakan intelektual. Muridnya kelak melawan kolonialisme.</p></div>
+      <div class="card a pop" style="--d:.5s"><div class="big" style="font-size:72px">1883</div><p>Konsul Belanda di Jeddah melaporkan Kiai Sholeh mengundang Utsmaniyah melawan Belanda di Jawa, jejak sikap anti-kolonialnya.</p></div>
+      <div class="card a pop" style="--d:.7s"><h3>Murid jadi pahlawan</h3><p>Kartini, Hasyim Asy’ari, Ahmad Dahlan, dan Wahab Hasbullah telah bergelar Pahlawan Nasional.</p></div>
+      <div class="card a pop" style="--d:.9s;background:var(--green-d);color:var(--cream)"><h3 class="gold-t">Menembus benua</h3><p>Kitabnya dibaca lintas benua, dan namanya dikenal hingga Pakistan sebagai Syekh Sholeh As-Samaraniy.</p></div>
+    </div>
+    <div class="src a" style="--d:1.2s;color:var(--ink)">Sumber: NU Online, tafsiralquran.id</div>
+  </section>
+
+  <!-- 8. Warisan -->
+  <section class="scene dark" data-dur="10000">
+    <div class="kicker a">Warisan</div>
+    <h2 class="a" style="--d:.15s;margin-bottom:24px">Warisan yang terus dihidupkan</h2>
+    <div class="grid2">
+      <div class="card a" style="--d:.3s"><h3 class="gold-t">Haul tahunan</h3><p>Haul ke-126 digelar 28 Maret 2026 di Masjid KH Sholeh Darat, Semarang Utara, bersamaan dengan pengumuman pengusulan gelar pahlawan. Makamnya di Bergota.</p></div>
+      <div class="card a" style="--d:.5s"><h3 class="gold-t">Kopisoda</h3><p>Komunitas Pecinta KH Sholeh Darat rutin mengaji, misalnya Hidayatur Rahman (ringkasan Faidhur Rahman), dan menelusuri kitab yang belum ditemukan.</p></div>
+    </div>
+    <h3 class="a" style="--d:.7s;font-size:26px;margin:30px 0 16px">Roadmap gelar Pahlawan Nasional</h3>
+    <div class="grid4">
+      <div class="tl a left" style="--d:.9s"><div class="yr">2021</div><p>PCNU Kota Semarang mengusulkan</p></div>
+      <div class="tl a left" style="--d:1.1s"><div class="yr">Mei 2025</div><p>Seminar nasional pengusulan di Semarang</p></div>
+      <div class="tl a left" style="--d:1.3s"><div class="yr">Mar 2026</div><p>Berkas dikirim Pemkot ke Pemprov Jateng</p></div>
+      <div class="tl a left" style="--d:1.5s"><div class="yr">Jul 2026</div><p>Verifikasi lapangan tim pusat, 14–16 Juli</p></div>
+    </div>
+    <div class="src a" style="--d:1.7s">Sumber: NU Online, Kompas, RMOL, ANTARA</div>
+  </section>
+
+  <!-- 9. Penutup -->
+  <section class="scene deep" data-dur="9000">
+    <svg class="a pop float" style="position:absolute;right:130px;top:50%;transform:translateY(-50%);width:340px;height:340px" viewBox="0 0 100 100"><path d="M60 8a42 42 0 1 0 30 70A36 36 0 0 1 60 8z" fill="#c9963f"/><path d="M85 35l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#c9963f"/></svg>
+    <div class="kicker a">Penutup</div>
+    <h2 class="a" style="--d:.15s;max-width:720px;font-size:64px">Satu guru, banyak jalan menuju Indonesia.</h2>
+    <div class="card a left" style="--d:.6s;max-width:640px;background:transparent;border:2px solid var(--gold);color:var(--cream);box-shadow:none"><p style="font-size:22px">Kalau satu guru bisa melahirkan dua organisasi besar, apa yang mestinya menyatukan kita?</p></div>
+    <div class="src a" style="--d:1s">Sumber: NU Online, Tirto, tafsiralquran.id, Kompas, ANTARA, RMOL</div>
+  </section>
+
+  <div class="bar" id="bar"></div>
+</div>
+
+<div class="counter" id="counter"></div>
+<div class="controls">
+  <button id="prev">◀</button>
+  <button id="play">❚❚ Jeda</button>
+  <button id="next">▶</button>
+</div>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame');
+  const scenes=[...frame.querySelectorAll('.scene')];
+  const bar=document.getElementById('bar');
+  const counter=document.getElementById('counter');
+  const playBtn=document.getElementById('play');
+  let idx=0, playing=true, elapsed=0, last=performance.now();
+
+  function fit(){
+    const s=Math.min(innerWidth/1600, innerHeight/900);
+    frame.style.transform='translate(-50%,-50%) scale('+s+')';
+  }
+  addEventListener('resize',fit); fit();
+
+  function show(i){
+    idx=(i+scenes.length)%scenes.length;
+    scenes.forEach((s,j)=>{
+      s.classList.remove('active');
+      if(j===idx){ void s.offsetWidth; s.classList.add('active'); }
+    });
+    elapsed=0;
+    counter.textContent=(idx+1)+' / '+scenes.length;
+  }
+  function tick(now){
+    const dt=now-last; last=now;
+    if(playing){
+      elapsed+=dt;
+      const dur=+scenes[idx].dataset.dur||9000;
+      bar.style.width=Math.min(100,elapsed/dur*100)+'%';
+      if(elapsed>=dur) show(idx+1);
+    }
+    requestAnimationFrame(tick);
+  }
+  document.getElementById('next').onclick=()=>show(idx+1);
+  document.getElementById('prev').onclick=()=>show(idx-1);
+  playBtn.onclick=()=>{playing=!playing; playBtn.textContent=playing?'❚❚ Jeda':'▶ Putar'; last=performance.now();};
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight')show(idx+1);
+    if(e.key==='ArrowLeft')show(idx-1);
+    if(e.key===' '){e.preventDefault();playBtn.click();}
+  });
+  show(0);
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
