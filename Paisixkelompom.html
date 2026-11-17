@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Satu Guru, Banyak Jalan - KH Sholeh Darat (Interaktif)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;600&family=Noto+Naskh+Arabic:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#e10600;--ink:#111;--paper:#f1f1ef;--teal:#4fc3b8;--slate:#2b2f3a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;overflow:hidden;font-family:Oswald,Arial,sans-serif}
+#frame{position:absolute;left:50%;top:50%;width:1600px;height:900px;overflow:hidden;--mx:0;--my:0}
+.sl{position:absolute;inset:0;padding:84px 96px 72px;display:flex;flex-direction:column;justify-content:center;opacity:0;visibility:hidden;transition:opacity .6s;overflow:hidden}
+.sl.on{opacity:1;visibility:visible}
+.d{background:#111;color:#fff}.l{background:var(--paper);color:var(--ink)}.s{background:var(--slate);color:#fff}.r{background:var(--red);color:#fff}
+.a{opacity:0;transform:translateY(26px);transition:opacity .6s,transform .7s cubic-bezier(.2,1.25,.4,1);transition-delay:var(--d,0s)}
+.on .a{opacity:1;transform:none}
+.pop{transform:scale(.5) rotate(-6deg)}.on .pop{transform:none}
+.fl-l{transform:translateX(-90px)}.on .fl-l{transform:none}
+.px{transform:translate(calc(var(--mx)*-24px),calc(var(--my)*-24px))}
+.tag{align-self:flex-start;background:var(--ink);color:#fff;font-size:16px;letter-spacing:.22em;text-transform:uppercase;padding:8px 18px;margin-bottom:24px;font-weight:600}
+.d .tag,.s .tag{background:var(--red)}.r .tag{background:var(--ink)}
+h2{font-family:Anton;font-weight:400;text-transform:uppercase;font-size:64px;line-height:1.02;margin-bottom:34px}
+.hl{background:var(--red);color:#fff;padding:0 14px}.r .hl{background:var(--ink)}
+p{font-size:21px;line-height:1.45}
+.src{position:absolute;left:96px;bottom:26px;font-size:14px;opacity:.7}
+.card{background:#fff;color:var(--ink);border-left:12px solid var(--red);box-shadow:8px 8px 0 #111;padding:22px 26px;transition:transform .3s,background .3s;cursor:default}
+.card:hover{transform:translate(-4px,-4px)}
+.s .card,.d .card{background:#222;color:#fff;box-shadow:8px 8px 0 var(--red);border-left-color:#fff}
+.card h3{font-family:Anton;font-weight:400;text-transform:uppercase;font-size:28px;margin-bottom:8px;letter-spacing:.02em}
+.card p{font-size:19px;line-height:1.4}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.big{font-family:Anton;font-size:120px;line-height:.9;color:var(--red)}
+.wipe{position:absolute;inset:0;background:var(--red);transform:translateX(-101%);z-index:30;pointer-events:none}
+.wipe.run{animation:wp .9s cubic-bezier(.7,0,.3,1)}
+@keyframes wp{0%{transform:translateX(-101%)}50%{transform:none}100%{transform:translateX(101%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes rip{from{transform:scale(.3);opacity:.9}to{transform:scale(2.8);opacity:0}}
+@keyframes flow{to{stroke-dashoffset:-18}}
+@keyframes run{from{left:-8%}to{left:100%}}
+@keyframes flick{0%,100%{transform:scale(1)}50%{transform:scale(1.1,.92) translateY(-3px)}}
+@keyframes bk{from{opacity:0;transform:rotate(180deg) translateY(70px)}to{opacity:1;transform:rotate(180deg)}}
+@keyframes dr{to{stroke-dashoffset:0}}
+@keyframes shk{20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}}
+.ln{stroke:#111;stroke-width:4;stroke-dasharray:520;stroke-dashoffset:520}
+.on .ln{animation:dr 1.3s .5s forwards}
+.nd{position:absolute;width:220px;height:220px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform .35s;cursor:pointer;border:4px solid #111}
+.nd:hover{transform:scale(1.08)}
+.nd b{font-family:Anton;font-weight:400;text-transform:uppercase;font-size:28px;line-height:1.05}
+.nd small{font-size:15px;margin-top:4px}
+.life{position:relative;height:16px;background:#333;margin:34px 0 10px}
+.life i{position:absolute;left:0;top:0;height:100%;width:0;background:var(--red);transition:width 2.4s ease .5s}
+.on .life i{width:100%}
+.fuse{position:relative;height:6px;background:#111;margin:26px 0 10px}
+.fuse i{position:absolute;top:-9px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 0 22px #fff}
+.on .fuse i{animation:run 2.6s linear infinite}
+.rp{position:absolute;inset:0;border:3px solid var(--teal);border-radius:50%;animation:rip 2.8s linear infinite;animation-play-state:paused}
+.on .rp{animation-play-state:running}
+.rp:nth-child(2){animation-delay:.9s}.rp:nth-child(3){animation-delay:1.8s}
+.fl2{animation:flick .9s ease-in-out infinite;transform-origin:50% 100%}
+.fc{perspective:900px;height:340px;cursor:pointer}
+.fi{position:relative;width:100%;height:100%;transition:transform .8s;transform-style:preserve-3d}
+.fc:hover .fi,.fc.f .fi{transform:rotateY(180deg)}
+.ff{position:absolute;inset:0;backface-visibility:hidden;background:#fff;box-shadow:8px 8px 0 #111;padding:24px;display:flex;flex-direction:column;justify-content:space-between}
+.fb{transform:rotateY(180deg);background:#111;color:#fff;box-shadow:8px 8px 0 var(--red)}
+.ini{background:var(--teal);font:400 58px Anton;display:flex;align-items:center;justify-content:center;height:120px}
+.ff h3{font-family:Anton;font-weight:400;text-transform:uppercase;font-size:28px;line-height:1.05}
+.fb p{font-size:18px}
+.shelf{display:flex;align-items:flex-end;gap:8px;height:360px;border-bottom:14px solid #fff;padding:0 6px;margin:6px 0 22px}
+.on .bk{animation:bk .7s both;animation-delay:calc(var(--i)*70ms)}
+.bk{width:60px;writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font:600 13px Oswald;color:#fff;text-align:center;padding:10px 0;cursor:pointer;transition:opacity .4s,filter .2s}
+.bk:hover{filter:brightness(1.3)}
+.bk.dim{opacity:.18}
+.fbtn{background:#222;color:#fff;border:2px solid #fff;padding:7px 14px;font:16px Anton;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;margin-right:8px}
+.fbtn:hover{background:var(--red)}
+#kd{min-height:70px;font-size:22px;margin-top:4px}
+.tk{position:relative;height:12px;background:#222;margin:30px 0 40px}
+.tk i{position:absolute;left:0;top:0;height:100%;width:0;background:var(--red);transition:width 2.4s ease}
+.on .tk i{width:100%}
+.rc{background:#222;padding:20px 22px;box-shadow:8px 8px 0 var(--red);cursor:pointer;transition:transform .3s,background .3s;border-left:10px solid #fff}
+.rc:hover{transform:translateY(-6px)}
+.rc.hot{background:var(--teal);color:var(--ink);border-left-color:var(--ink)}
+.rc h3{font-family:Anton;font-weight:400;font-size:40px;color:var(--red);line-height:1}
+.rc.hot h3{color:var(--ink)}
+.rc p{font-size:17px;margin-top:6px}
+.op{display:block;width:100%;margin:12px 0;padding:16px 22px;background:#fff;border:0;border-left:10px solid #111;font:600 22px Oswald;text-align:left;cursor:pointer;box-shadow:6px 6px 0 #111;transition:transform .2s}
+.op:hover{transform:translateX(10px)}
+.op.ok{background:var(--teal)}
+.op.no{background:var(--red);color:#fff;animation:shk .4s}
+.qq{font:400 46px Anton;text-transform:uppercase;line-height:1.05;margin-bottom:10px}
+.rb{background:#111;color:#fff;border:2px solid #fff;padding:10px 18px;font:18px Anton;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.rb:hover{background:var(--red)}
+.note{background:#fff;color:#111;padding:14px 18px;font:21px Oswald;transform:rotate(var(--r));box-shadow:6px 6px 0 var(--red);animation:rise .6s both;max-width:300px}
+@keyframes rise{from{opacity:0;transform:translateY(40px) rotate(var(--r))}to{opacity:1;transform:rotate(var(--r))}}
+#fx{position:absolute;inset:0;pointer-events:none;z-index:20;opacity:.22}
+.ctl{position:fixed;right:14px;bottom:12px;z-index:40;display:flex;gap:6px}
+.ctl button{background:#111;color:#fff;border:2px solid #fff;padding:6px 12px;font:15px Anton;letter-spacing:.06em;cursor:pointer}
+.ctl button:hover{background:var(--red)}
+#cnt{position:fixed;left:14px;bottom:10px;z-index:40;color:#fff;font:20px Anton;letter-spacing:.06em}
+#dots{position:fixed;top:14px;right:14px;z-index:40;display:flex;gap:6px}
+#dots i{width:12px;height:12px;background:#666;cursor:pointer;display:block}
+#dots i.on{background:var(--red)}
+</style></head>
+<body>
+<div id="frame"><div id="deck"></div><canvas id="fx" width="1600" height="900"></canvas><div class="wipe" id="wp"></div></div>
+<div id="dots"></div>
+<div class="ctl"><button id="pv">◀</button><button id="au">Auto: mati</button><button id="nx">▶</button></div>
+<div id="cnt"></div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const CC={Fikih:'#e10600',Tasawuf:'#4fc3b8',Akidah:'#2b2f3a',Tafsir:'#7d8390','Perlu dicek':'#444'};
+const BK=[['Majmu’ah Syari’ah al-Kafiyah','Fikih'],['Lathaif at-Thaharah','Fikih'],['Manasik Haji','Fikih'],['Asrar as-Shalah','Fikih'],['Munjiyat','Tasawuf'],['Al-Hikam','Tasawuf'],['Minhaj al-Atqiya’','Tasawuf'],['Sabil al-‘Abid','Akidah'],['Mursyid al-Wajiz','Akidah'],['Faidhur Rahman','Tafsir'],['Hadits al-Mi’raj','Tafsir'],['Judul ke-12 (perlu dilengkapi)','Perlu dicek']];
+const Q=[['NU didirikan pada tahun berapa?',['1912','1926','1945'],1],['Julukan Mbah Sholeh Darat dari kiai-kiai muda Jawa adalah…',['Ghazali Kecil','Diponegoro Kecil','Sayyid Darat'],0],['Faidhur Rahman ditulis dalam bahasa…',['Arab','Jawa','Melayu'],1],['Mbah Sholeh Darat wafat pada tahun…',['1880','1903','1925'],1]];
+const FR=[0,.33,.66,1];
+let qi=0,sc=0,curL=0;
+
+const S=[
+{k:'cover',c:'d',h:`<div class="px" style="position:absolute;right:-160px;top:-120px;width:820px;height:820px;border:2px solid #4fc3b8;border-radius:50%;opacity:.4"><div style="width:100%;height:100%;border-radius:50%;animation:spin 60s linear infinite"></div></div>
+<div class="px" style="position:absolute;right:200px;top:240px;width:340px;height:340px"><svg viewBox="0 0 100 100" style="width:100%;height:100%;animation:spin 40s linear infinite reverse;transform-origin:50% 50%;transform-box:fill-box"><polygon points="50,2 60,40 98,50 60,60 50,98 40,60 2,50 40,40" fill="none" stroke="#e10600" stroke-width="1.6"/></svg></div>
+<div class="tag a">Presentasi Tokoh</div>
+<h1 style="font:400 150px/.92 Anton;text-transform:uppercase"><span class="a" style="--d:.1s;display:block">Satu guru,</span><span class="a" style="--d:.45s;display:block;color:#4fc3b8">banyak jalan</span></h1>
+<p class="a" style="--d:.9s;font-size:30px;margin-top:36px;color:#4fc3b8;font-weight:600">KH. Muhammad Sholeh bin Umar as-Samarani</p>
+<p class="a" style="--d:1.1s;font-size:20px;opacity:.85">Mbah Sholeh Darat · Guru Para Pendiri Bangsa</p>
+<p class="a" style="--d:1.4s;font-size:15px;letter-spacing:.2em;opacity:.6;margin-top:50px">TEKAN → ATAU KLIK UNTUK MULAI</p>`},
+
+{k:'fakta',c:'l',h:`<div class="tag a">Fakta Menarik</div>
+<h2 class="a" style="--d:.1s">Dua ormas Islam raksasa, <span class="hl">satu guru</span> yang sama</h2>
+<div style="display:flex;gap:70px;align-items:center">
+<div style="flex:1">
+<div class="card a fl-l" style="--d:.3s;margin-bottom:20px"><h3>NU (1926)</h3><p>Didirikan KH Hasyim Asy’ari. Survei 2022 memperkirakan anggotanya hampir <b><span data-n="150" data-s=" juta">0</span></b>, sekitar <span data-n="59" data-s="%">0</span> muslim Indonesia.</p></div>
+<div class="card a fl-l" style="--d:.5s;margin-bottom:20px"><h3>Muhammadiyah</h3><p>Didirikan KH Ahmad Dahlan lebih dari satu dekade sebelum NU, dikenal sebagai sayap modernis Islam lewat beragam amal usaha.</p></div>
+<div class="card a fl-l" style="--d:.7s;background:#222;color:#fff"><h3 style="color:#4fc3b8">Satu guru</h3><p>Keduanya pernah berguru pada KH. Muhammad Sholeh bin Umar as-Samarani, guru yang namanya tak sepopuler murid-muridnya.</p></div>
+</div>
+<div class="px a pop" style="--d:.4s;position:relative;width:560px;height:560px;flex:0 0 auto">
+<svg viewBox="0 0 560 560" style="position:absolute;inset:0;width:100%;height:100%"><path class="ln" d="M150 150 Q200 330 280 420"/><path class="ln" d="M410 150 Q360 330 280 420"/></svg>
+<div class="nd" style="left:40px;top:40px;background:#4fc3b8"><b>NU</b><small>KH Hasyim Asy’ari</small></div>
+<div class="nd" style="left:300px;top:40px;background:#2b2f3a;color:#fff"><b style="font-size:21px">Muhammadiyah</b><small>KH Ahmad Dahlan</small></div>
+<div class="nd" style="left:170px;top:310px;background:#e10600;color:#fff;width:220px"><b style="font-size:24px">Mbah Sholeh Darat</b></div>
+</div></div>
+<div class="src a" style="--d:1s">Sumber: Tirto, NU Online</div>`},
+
+{k:'agenda',c:'l',h:`<div class="tag a">Isi Presentasi</div><h2 class="a">Alur presentasi</h2>
+<div class="grid4" style="grid-template-columns:repeat(3,1fr);gap:26px">
+${[['01','Siapa dia?','Identitas, tempat, dan tahun hidup',3],['02','Perjalanan ilmu','Jepara, Jawa Tengah, Mekah, dan Darat',5],['03','Murid dan jaringan','Ulama Haramain dan kelas legendaris',6],['04','Karya dan terobosan','12 kitab dan tafsir Faidhur Rahman',9],['05','Perjuangan','Pena, bukan pedang',12],['06','Warisan','Haul, komunitas, dan gelar pahlawan',13]].map((x,i)=>`<div class="card a pop" data-go="${x[3]}" style="--d:${.2+i*.12}s;cursor:pointer;background:#2b2f3a;color:#fff;border-left-color:#e10600;box-shadow:8px 8px 0 #e10600;height:200px"><div style="font:400 44px Anton;color:#4fc3b8">${x[0]}</div><h3 style="margin-top:8px">${x[1]}</h3><p style="font-size:16px;color:#e6e9ee">${x[2]}</p></div>`).join('')}
+</div><p class="a" style="--d:1.2s;font-size:16px;margin-top:26px;opacity:.7">Klik salah satu kartu untuk langsung ke bagian itu.</p>`},
+
+{k:'siapa',c:'d',h:`<div class="tag a">Siapa Dia?</div>
+<h2 class="a" style="font-size:52px">KH. Muhammad Sholeh bin Umar as-Samarani</h2>
+<div class="grid4" style="grid-template-columns:1fr 1fr 1fr 1fr;gap:20px">
+<div class="card a" style="--d:.2s;background:#fff;color:#111"><div class="big" data-n="1820" data-p="±" data-s="" style="font-size:72px">±1820</div><p style="font-size:17px;margin-top:8px">Lahir di Kedung Cumpleng, Mayong, Jepara; setahun dengan Syaikh Kholil Bangkalan.</p></div>
+<div class="card a" style="--d:.35s;background:#fff;color:#111"><div class="big" data-n="1903" style="font-size:72px">1903</div><p style="font-size:17px;margin-top:8px">Wafat 28 Ramadhan 1321 H (18 Desember).</p></div>
+<div class="card a" style="--d:.5s;background:#fff;color:#111"><div class="big" data-n="83" style="font-size:72px">83</div><p style="font-size:17px;margin-top:8px">Tahun usia; tahun lahir masih perkiraan.</p></div>
+<div class="card a" style="--d:.65s;background:#fff;color:#111"><div class="big" style="font-size:60px">Bergota</div><p style="font-size:17px;margin-top:8px">Makamnya di Semarang.</p></div>
+</div>
+<div class="life a" style="--d:.8s"><i></i></div>
+<div class="a" style="--d:.9s;display:flex;justify-content:space-between;font-size:16px;opacity:.8"><span>1820</span><span>Masa hidup</span><span>1903</span></div>
+<p class="a" style="--d:1.1s;margin-top:26px;font-size:19px;max-width:1300px">Nama lengkapnya KH. Muhammad Sholeh bin ‘Umar al-Samarani al-Jawi asy-Syafi’i. “Darat” merujuk kawasan pesisir Semarang tempat ia tinggal dan membangun masjid; kiai-kiai muda Jawa menjulukinya “Ghazali Kecil”.</p>
+<div class="src a" style="--d:1.3s">Sumber: tafsiralquran.id, jurnal Walisongo, Tirto</div>`},
+
+{k:'latar',c:'r',h:`<div class="tag a">Latar Keluarga</div><h2 class="a">Putra pejuang Diponegoro</h2>
+<div style="display:flex;gap:60px;align-items:center">
+<div style="flex:1"><div class="big a" style="font-size:130px;color:#111">1825–1830</div>
+<div class="fuse a" style="--d:.4s"><i></i></div>
+<p class="a" style="--d:.6s">Masa Perang Jawa, ketika Kyai Umar menjadi tangan kanan Pangeran Diponegoro di pesisir utara Jawa.</p>
+<p class="a" style="--d:.8s;font-size:18px;opacity:.85;margin-top:14px">Dari ayahnyalah ia pertama kali belajar dasar-dasar agama.</p></div>
+<div style="width:620px;display:grid;gap:18px">
+<div class="card a fl-l" style="--d:.5s"><h3>Ayah: Kyai Umar</h3><p>Ulama sekaligus pejuang, tangan kanan Pangeran Diponegoro.</p></div>
+<div class="card a fl-l" style="--d:.7s"><h3>Pendidikan pertama</h3><p>Belajar dasar agama pada ayahnya di lingkungan keluarga pejuang Diponegoro.</p></div>
+<div class="card a fl-l" style="--d:.9s"><h3>Jejak yang diwariskan</h3><p>Latar keluarga pejuang ikut membentuk sikap anti-kolonialnya. (Interpretasi penyusun.)</p></div>
+</div></div>
+<div class="src a" style="--d:1.1s">Sumber: tafsiralquran.id, jurnal Walisongo, Tirto</div>`},
+
+{k:'perjalanan',c:'l',h:`<div class="tag a">Perjalanan Ilmu</div><h2 class="a">Dari Jepara ke Mekah, kembali ke Darat</h2>
+<svg class="a" viewBox="0 0 1400 200" style="width:100%;height:200px;overflow:visible"><path id="rp" d="M20 150 C260 -10 470 330 720 110 S1150 -10 1380 120" fill="none" stroke="#111" stroke-width="6"/><circle id="rd" r="17" fill="#e10600"/></svg>
+<div class="grid4" style="margin-top:20px">
+<div class="card rc a" style="--d:.2s"><h3>01</h3><p><b>Jepara · ±1820</b><br>Belajar dasar agama pada ayahnya, Kyai Umar, di lingkungan keluarga pejuang Diponegoro.</p></div>
+<div class="card rc a" style="--d:.3s"><h3>02</h3><p><b>Jawa Tengah</b><br>Tafsir Jalalain pada Raden H. Muhammad Sholeh bin Asnawi (Kudus), nahwu-sharaf pada Kiai Ishak (Damaran), falak pada Kiai Abdullah Baquni.</p></div>
+<div class="card rc a" style="--d:.4s"><h3>03</h3><p><b>Mekah · hingga ±1870</b><br>Berguru pada Sayyid Ahmad Zaini Dahlan, mufti Syafi’iyyah dan guru Nawawi al-Bantani serta Kholil Bangkalan. Ia diizinkan mengajar di sana.</p></div>
+<div class="card rc a" style="--d:.5s"><h3>04</h3><p><b>Darat, Semarang</b><br>Memimpin pesantren di Kampung Darat dan menyambungkan jaringan ulama Haramain dengan ulama Jawa.</p></div>
+</div>
+<p class="a" style="--d:.7s;margin-top:22px;font-size:17px">Di Semarang ia juga belajar Jauhar at-Tauhid dan Minhaj al-Abidin pada Sayid Ahmad Bafaqih Ba’alawi.</p>
+<div class="src a" style="--d:.9s">Sumber: tafsiralquran.id, Tirto, Kompas, ejournal UIN Satu</div>`},
+
+{k:'jaringan',c:'s',h:`<div class="tag a">Jaringan Ulama</div><h2 class="a">Menyambung Haramain dan Jawa</h2>
+<div class="a" style="position:relative;width:1100px;height:420px;margin:0 auto">
+<svg width="1100" height="420" style="position:absolute;inset:0;overflow:visible">
+<line class="fl" data-i="1" x1="550" y1="210" x2="550" y2="60" stroke="#4fc3b8" stroke-width="3" stroke-dasharray="10 8" style="animation:flow 1.5s linear infinite"/>
+<line class="fl" data-i="2" x1="550" y1="210" x2="170" y2="210" stroke="#4fc3b8" stroke-width="3" stroke-dasharray="10 8" style="animation:flow 1.5s linear infinite"/>
+<line class="fl" data-i="3" x1="550" y1="210" x2="930" y2="210" stroke="#4fc3b8" stroke-width="3" stroke-dasharray="10 8" style="animation:flow 1.5s linear infinite"/>
+<line class="fl" data-i="4" x1="550" y1="210" x2="330" y2="380" stroke="#4fc3b8" stroke-width="3" stroke-dasharray="10 8" style="animation:flow 1.5s linear infinite"/>
+<line class="fl" data-i="5" x1="550" y1="210" x2="770" y2="380" stroke="#4fc3b8" stroke-width="3" stroke-dasharray="10 8" style="animation:flow 1.5s linear infinite"/>
+</svg>
+<div class="nd" style="left:440px;top:100px;width:220px;height:220px;background:#e10600;color:#fff"><b style="font-size:24px">Mbah Sholeh Darat</b></div>
+<div class="nd" style="left:440px;top:-50px;width:220px;height:110px;border-radius:24px;background:#fff;color:#111;font-size:14px;padding:6px" data-i="1"><b style="font-size:19px">Sayyid A. Zaini Dahlan</b><small>mufti Syafi’iyyah, Mekah</small></div>
+<div class="nd" style="left:60px;top:155px;width:200px;height:110px;border-radius:24px;background:#fff;color:#111;padding:6px" data-i="2"><b style="font-size:19px">Syekh Nawawi al-Bantani</b><small>pulang bersama</small></div>
+<div class="nd" style="left:830px;top:155px;width:200px;height:110px;border-radius:24px;background:#fff;color:#111;padding:6px" data-i="3"><b style="font-size:19px">Ulama Jawa</b><small>jaringan pesantren</small></div>
+<div class="nd" style="left:200px;top:330px;width:250px;height:100px;border-radius:24px;background:#111;color:#fff;padding:6px" data-i="4"><b style="font-size:17px">Kiai Ishak (Damaran)</b><small>nahwu-sharaf</small></div>
+<div class="nd" style="left:650px;top:330px;width:250px;height:100px;border-radius:24px;background:#111;color:#fff;padding:6px" data-i="5"><b style="font-size:17px">Kiai Abdullah Baquni</b><small>falak</small></div>
+</div>
+<p class="a" style="--d:.8s;text-align:center;margin-top:18px;font-size:17px;opacity:.85">Arahkan kursor ke tiap ulama untuk melihat jalur penyambungnya. Tradisi lisan menyebut ia pulang dari Arab bersama Syekh Nawawi al-Bantani dan Syekh Muhammad Saman.</p>
+<div class="src a" style="--d:1s">Sumber: tafsiralquran.id, Tirto, Kompas, ejournal UIN Satu; tradisi lisan: jatengprov.go.id</div>`},
+
+{k:'pesantren',c:'d',h:`<div class="tag a">Pesantren Darat</div><h2 class="a">Kampung Darat, Semarang</h2>
+<div style="display:flex;gap:70px;align-items:center">
+<div class="a pop" style="--d:.2s;position:relative;width:420px;height:420px;flex:0 0 auto;cursor:pointer" onclick="this.querySelector('.inf').classList.toggle('show')">
+<div class="rp" style="inset:0"></div><div class="rp" style="inset:0"></div><div class="rp" style="inset:0"></div>
+<div style="position:absolute;inset:70px;background:#4fc3b8;border-radius:50%;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 100 100" style="width:62%;height:62%"><path d="M10 84H90V56Q90 22 50 14Q10 22 10 56Z" fill="#111"/><rect x="82" y="30" width="7" height="54" fill="#111"/><rect x="11" y="30" width="7" height="54" fill="#111"/></svg></div>
+<div class="inf" style="position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);background:#fff;color:#111;padding:12px 16px;font-size:16px;width:340px;opacity:0;transition:opacity .4s;pointer-events:none;box-shadow:6px 6px 0 #e10600">Masjid KH Sholeh Darat, Semarang Utara</div>
+</div>
+<div style="flex:1;display:grid;gap:22px">
+<div class="card a fl-l" style="--d:.4s;background:#222;color:#fff"><h3 style="color:#4fc3b8">Asal nama Darat</h3><p>Kawasan pesisir Semarang tempat ia tinggal dan membangun masjid, yang kemudian melekat pada namanya.</p></div>
+<div class="card a fl-l" style="--d:.6s;background:#222;color:#fff"><h3 style="color:#4fc3b8">Pusat pengajaran</h3><p>Memimpin pesantren di Kampung Darat dan menyambungkan jaringan ulama Haramain dengan ulama Jawa.</p></div>
+<div class="card a fl-l" style="--d:.8s;background:#222;color:#fff"><h3 style="color:#4fc3b8">Tempat yang terus hidup</h3><p>Masjid ini menjadi lokasi haul ke-126 pada 2026, bersamaan dengan pengumuman pengusulan gelar pahlawan.</p></div>
+</div></div>
+<div class="src a" style="--d:1s">Sumber: tafsiralquran.id, Tirto, Kompas; haul: NU Online, Kompas, RMOL, ANTARA</div>
+<style>.inf.show{opacity:1!important}</style>`},
+
+{k:'murid',c:'l',h:`<div class="tag a">Murid-murid</div><h2 class="a">Kelas yang melahirkan dua ormas raksasa</h2>
+<div class="grid4">
+${[['HA','KH Hasyim Asy’ari','Pendiri NU dan pengasuh Tebuireng, Jombang. Menggerakkan perlawanan 10 November.'],['AD','KH Ahmad Dahlan','Pendiri Muhammadiyah di Yogyakarta. Bersahabat dengan Hasyim Asy’ari sejak sama-sama menuntut ilmu.'],['RK','RA Kartini','Terkesan mendengar tafsir Al-Fatihah berbahasa Jawa. Riwayat menyebut ia meminta Al-Qur’an diterjemahkan.'],['+','Ulama lain','Mahfudh Termas, Idris Jamsaren, Bisri Syansuri, Raden Asnawi Kudus, dan KH Zarkasi Berjan (Purworejo).']].map((m,i)=>`<div class="fc a" style="--d:${.2+i*.15}s" onclick="this.classList.toggle('f')"><div class="fi"><div class="ff"><div class="ini">${m[0]}</div><h3>${m[1]}</h3><small>Klik untuk membalik</small></div><div class="ff fb"><h3 style="color:#4fc3b8">${m[1]}</h3><p>${m[2]}</p></div></div></div>`).join('')}
+</div>
+<div class="a" style="--d:1s;margin-top:34px;background:#e10600;color:#fff;padding:18px 26px;font-size:22px;font-weight:600">Disebut “embahnya para ulama di Jawa” oleh KH Ahmad Hadlor Ihsan.</div>
+<div class="src a" style="--d:1.2s">Sumber: NU Online, Tirto</div>`},
+
+{k:'karya',c:'d',h:`<div class="tag a">Karya</div>
+<h2 class="a" style="margin-bottom:18px"><span class="big" data-n="12" style="font-size:1.3em;margin-right:14px;vertical-align:middle">0</span>kitab berbahasa Jawa untuk umat awam</h2>
+<div class="a" style="margin-bottom:6px"><button class="fbtn" data-f="all">Semua</button><button class="fbtn" data-f="Fikih">Fikih</button><button class="fbtn" data-f="Tasawuf">Tasawuf</button><button class="fbtn" data-f="Akidah">Akidah &amp; Qur’an</button><button class="fbtn" data-f="Tafsir">Tafsir &amp; sirah</button></div>
+<div class="shelf a" style="--d:.3s"></div>
+<div id="kd" class="a" style="--d:.5s">Klik satu kitab untuk melihat kategorinya.</div>
+<div class="src a" style="--d:.8s">Sumber: tafsiralquran.id, NU Online. Judul ke-12 belum tercatat di PDF; cek ulang.</div>`},
+
+{k:'faidhur',c:'l',h:`<div class="tag a">Terobosan</div><h2 class="a">Faidhur Rahman: tafsir Jawa pertama</h2>
+<div style="display:flex;gap:70px;align-items:center">
+<div class="a pop" style="--d:.2s;flex:0 0 520px;background:#4fc3b8;padding:34px;text-align:center">
+<div style="font:700 80px/1.3 'Noto Naskh Arabic',serif;color:#111">فيض<br>الرحمن</div>
+<div style="font:400 30px Anton;color:#111;margin-top:14px">1312 H / 1894 M</div>
+<p style="font-size:17px;margin-top:10px">Bahasa Jawa, aksara pegon (Arab-Jawa), bercorak isyari</p></div>
+<div style="flex:1">
+<div class="a" style="--d:.4s;display:flex;align-items:center;gap:36px">
+<svg viewBox="0 0 260 260" width="260" height="260" style="flex:0 0 260px"><circle cx="130" cy="130" r="110" fill="none" stroke="#ddd" stroke-width="22"/><circle class="ring" cx="130" cy="130" r="110" fill="none" stroke="#e10600" stroke-width="22" transform="rotate(-90 130 130)" style="stroke-dasharray:691;stroke-dashoffset:392;transition:stroke-dashoffset .5s"/><text id="jv" x="130" y="150" text-anchor="middle" style="font:400 56px Anton" fill="#111">13</text></svg>
+<div><p style="font-size:20px">Geser untuk melihat progres dari 30 juz.</p><input id="jz" type="range" min="0" max="30" value="13" style="width:420px;margin-top:14px;accent-color:#e10600"><p id="jt" style="font-size:19px;margin-top:10px">Sekitar 13 juz ditulis sebelum beliau wafat.</p></div></div>
+</div></div>
+<div class="grid2" style="margin-top:34px">
+<div class="card a" style="--d:.6s"><h3>Untuk umat awam</h3><p>Tafsir pertama di Nusantara berbahasa Jawa dan beraksara pegon, agar yang tak paham Arab tetap bisa memahami makna Al-Qur’an.</p></div>
+<div class="card a" style="--d:.8s"><h3>Kisah Kartini</h3><p>Konon Kartini terkesan pada tafsir Al-Fatihah dan meminta penjelasan berbahasa Jawa. Ini riwayat keluarga; ada catatan kritis soal usia Kartini.</p></div>
+</div>
+<div class="src a" style="--d:1s">Sumber: NU Online, tafsiralquran.id. Tahun cetak tercatat berbeda di referensi (1893 M / 1314 H), cek ulang.</div>`},
+
+{k:'metode',c:'d',h:`<div class="tag a">Metode Dakwah</div><h2 class="a">Ilmu yang sampai ke umat awam</h2>
+<div class="grid4" style="grid-template-columns:1fr 1fr 1fr;gap:40px">
+<div class="card a" style="--d:.2s;background:#fff;color:#111"><h3>1 · Bahasa Jawa</h3><p>Penjelasan ditulis dalam bahasa yang dipakai masyarakat Jawa sehari-hari.</p></div>
+<div class="card a" style="--d:.4s;background:#fff;color:#111"><h3>2 · Aksara pegon</h3><p>Huruf Arab dipakai untuk menulis bahasa Jawa, sehingga umat yang tak paham bahasa Arab tetap bisa membaca isinya.</p></div>
+<div class="card a" style="--d:.6s;background:#fff;color:#111"><h3>3 · Hasil yang dituju</h3><p>Ilmu tidak berhenti di pesantren, tetapi sampai ke masyarakat luas.</p></div>
+</div>
+<div class="a" style="--d:.8s;position:relative;height:14px;background:#222;margin:40px 0"><i style="position:absolute;top:-8px;width:26px;height:26px;border-radius:50%;background:#4fc3b8;animation:run 2.4s linear infinite"></i><i style="position:absolute;top:-8px;width:26px;height:26px;border-radius:50%;background:#e10600;animation:run 2.4s linear infinite -1.2s"></i></div>
+<div class="card a" style="--d:1s;background:#2b2f3a;color:#fff;border-left-color:#e10600"><h3 style="color:#4fc3b8">Catatan analisis penyusun</h3><p>Kitab-kitab untuk awam menunjukkan pola yang sama: ilmu diturunkan ke bahasa masyarakat, bukan hanya dipelihara dalam lingkaran berbahasa Arab.</p></div>
+<div class="src a" style="--d:1.2s">Catatan: bagian analisis adalah interpretasi penyusun. Sumber: tafsiralquran.id, NU Online</div>`},
+
+{k:'perjuangan',c:'r',h:`<div class="tag a">Perjuangan</div><h2 class="a">Perlawanan senyap lewat pena dan ilmu</h2>
+<div style="display:flex;gap:70px;align-items:center">
+<div style="flex:0 0 560px;position:relative">
+<div style="position:absolute;left:0;top:-40px;width:420px;height:420px;opacity:.9"><div class="rp" style="border-color:#111"></div><div class="rp" style="border-color:#111"></div><div class="rp" style="border-color:#111"></div></div>
+<div class="big a" data-n="1883" data-s="" style="font-size:170px;color:#111;position:relative">1883</div>
+<p class="a" style="--d:.5s;margin-top:20px;font-size:21px">Konsul Belanda di Jeddah melaporkan Kiai Sholeh mengundang Utsmaniyah melawan Belanda di Jawa, jejak sikap anti-kolonialnya.</p></div>
+<div style="flex:1;display:grid;gap:20px">
+<div class="card a fl-l" style="--d:.3s;background:#111;color:#fff"><h3 style="color:#e10600">Pena, bukan pedang</h3><p class="tw" data-t="Tidak mengangkat senjata, tetapi membangun nasionalisme lewat gerakan intelektual. Muridnya kelak melawan kolonialisme."></p></div>
+<div class="card a fl-l" style="--d:.5s"><h3>Murid jadi pahlawan</h3><p>Kartini, Hasyim Asy’ari, Ahmad Dahlan, dan Wahab Hasbullah telah bergelar Pahlawan Nasional.</p></div>
+<div class="card a fl-l" style="--d:.7s;background:#111;color:#fff"><h3 style="color:#e10600">Menembus benua</h3><p>Kitabnya dibaca lintas benua, dan namanya dikenal hingga Pakistan sebagai Syekh Sholeh As-Samaraniy.</p></div>
+</div></div>
+<div class="src a" style="--d:1s">Sumber: NU Online, tafsiralquran.id</div>`},
+
+{k:'warisan',c:'l',h:`<div class="tag a">Warisan</div><h2 class="a">Warisan yang terus dihidupkan</h2>
+<div class="grid2">
+<div class="card a" style="--d:.2s;display:flex;gap:24px;align-items:flex-start"><div style="flex:0 0 96px"><svg class="fl2" viewBox="0 0 60 90" width="90" height="135"><path d="M30 4C44 26 52 40 50 60C48 76 40 86 30 86C20 86 12 76 10 60C8 40 16 26 30 4Z" fill="#e10600"/><path d="M30 40C36 52 40 62 38 72C36 80 33 84 30 84C27 84 24 80 22 72C20 62 24 52 30 40Z" fill="#4fc3b8"/></svg></div><div><h3>Haul tahunan</h3><p>Haul ke-<span data-n="126">0</span> digelar 28 Maret 2026 di Masjid KH Sholeh Darat, Semarang Utara, bersamaan dengan pengumuman pengusulan gelar pahlawan. Makamnya di Bergota.</p></div></div>
+<div class="card a" style="--d:.4s"><h3>Kopisoda</h3><p>Komunitas Pecinta KH Sholeh Darat rutin mengaji, misalnya Hidayatur Rahman (ringkasan Faidhur Rahman), dan menelusuri kitab yang belum ditemukan. Kajian corak tafsirnya pernah digelar di Masjid Kauman Semarang.</p></div>
+</div>
+<div class="src a" style="--d:.8s">Sumber: NU Online, Kompas, RMOL, ANTARA</div>`},
+
+{k:'gelar',c:'d',h:`<div class="tag a" style="background:#4fc3b8;color:#111">Roadmap</div><h2 class="a">Menuju gelar Pahlawan Nasional</h2>
+<div class="tk"><i></i></div>
+<div class="grid4" style="grid-template-columns:repeat(4,1fr)">
+${[['2021','PCNU Kota Semarang mengusulkan'],['Mei 2025','Seminar nasional pengusulan di Semarang'],['Mar 2026','Berkas dikirim Pemkot ke Pemprov Jateng'],['Jul 2026','Verifikasi lapangan tim pusat, 14–16 Juli']].map((x,i)=>`<div class="rc a" style="--d:${.9+i*.25}s" onclick="this.classList.toggle('hot')"><h3 style="color:#4fc3b8;font-size:34px">${x[0]}</h3><p>${x[1]}</p></div>`).join('')}
+</div>
+<p class="a" style="--d:1.8s;margin-top:26px;font-size:16px;opacity:.7">Catatan: status setelah Juli 2026 perlu dicek ulang sebelum presentasi.</p>
+<div class="src a" style="--d:2s">Sumber: NU Online, Kompas, RMOL, ANTARA</div>`},
+
+{k:'kuis',c:'l',h:`<div class="tag a">Kuis Singkat</div><h2 class="a">Seberapa kenal Mbah Sholeh Darat?</h2>
+<div id="qz" class="a" style="--d:.2s;max-width:1000px;position:relative"></div>
+<div class="src a" style="--d:.4s">Kuis ini memakai fakta dari slide sebelumnya.</div>`},
+
+{k:'penutup',c:'d',h:`<div class="tag a">Penutup</div>
+<h2 class="a" style="font-size:96px;max-width:1100px;line-height:.98">Satu guru, <span class="hl">banyak jalan</span> menuju Indonesia</h2>
+<div class="a" style="--d:.5s;border:4px solid #4fc3b8;padding:24px 30px;max-width:900px;font-size:24px">Kalau satu guru bisa melahirkan dua organisasi besar, apa yang mestinya menyatukan kita?</div>
+<div class="a" style="--d:.7s;display:flex;gap:10px;max-width:900px;margin-top:26px"><input id="rf" placeholder="Tulis jawaban Anda…" style="flex:1;padding:14px 18px;font:21px Oswald;border:3px solid #4fc3b8;background:transparent;color:#fff" onkeydown="if(event.key==='Enter')note()"><button class="rb" onclick="note()">Tempel</button></div>
+<div id="notes" style="display:flex;flex-wrap:wrap;gap:18px;margin-top:22px;min-height:60px"></div>
+<div class="src a" style="--d:.9s">Sumber: NU Online, Tirto, tafsiralquran.id, Kompas, ANTARA, RMOL</div>`}
+];
+
+const INIT={
+  perjalanan(el){const p=$('#rp',el),d=$('#rd',el),L=p.getTotalLength();
+    if(!el.dataset.b){el.dataset.b=1;FR.forEach((f,k)=>{const pt=p.getPointAtLength(f*L),c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',pt.x);c.setAttribute('cy',pt.y);c.setAttribute('r',9);c.setAttribute('fill','#111');p.parentNode.insertBefore(c,d)})}
+    p.style.transition='none';p.style.strokeDasharray=L;p.style.strokeDashoffset=L;p.getBoundingClientRect();p.style.transition='stroke-dashoffset 1.6s ease';p.style.strokeDashoffset=0;
+    const h=$$('.rc',el);curL=0;const st=p.getPointAtLength(0);d.setAttribute('cx',st.x);d.setAttribute('cy',st.y);
+    h.forEach((c,k)=>c.onclick=()=>{mv(FR[k]*L,el,k)});
+    let k=0;const seq=()=>{if(k<4){mv(FR[k]*L,el,k);k++;setTimeout(seq,1000)}};setTimeout(seq,1000)},
+  karya(el){const sh=$('.shelf',el);if(sh.children.length)return;
+    BK.forEach((b,i)=>{const d=document.createElement('div');d.className='bk';d.style.setProperty('--i',i);d.style.height=(240+(i*41)%90)+'px';d.style.background=CC[b[1]];d.dataset.c=b[1];d.textContent=b[0];d.onclick=()=>{$('#kd').innerHTML='<b style="color:#e10600">'+b[1]+'</b> · '+b[0]};sh.appendChild(d)})},
+  faidhur(el){},
+  kuis(){qi=0;sc=0;qz()}
+};
+
+function mv(to,el,k){const p=$('#rp',el),d=$('#rd',el),t0=performance.now(),from=curL,dur=800;
+  $$('.rc',el).forEach((c,j)=>c.classList.toggle('hot',j===k));
+  (function f(t){const q=Math.min(1,(t-t0)/dur),e=q<.5?2*q*q:1-((-2*q+2)**2)/2,pt=p.getPointAtLength(from+(to-from)*e);d.setAttribute('cx',pt.x);d.setAttribute('cy',pt.y);if(q<1)requestAnimationFrame(f);else curL=to})(t0)}
+
+function cnt(el){const e=+el.dataset.n,p0=el.dataset.p||'',s=el.dataset.s??'',t0=performance.now();(function f(t){const q=Math.min(1,(t-t0)/1500);el.textContent=p0+Math.round(e*(1-(1-q)**3))+s;if(q<1)requestAnimationFrame(f)})(t0)}
+function tw(el){const t=el.dataset.t;let i=0;el.textContent='';const id=setInterval(()=>{el.textContent=t.slice(0,++i);if(i>=t.length)clearInterval(id)},32)}
+
+function qz(){const box=$('#qz');
+  if(qi>=Q.length){box.innerHTML=`<div class="big"><span data-n="${sc}">0</span>/${Q.length}</div><p style="margin:14px 0">jawaban benar.</p><button class="rb" onclick="qi=0;sc=0;qz()">Ulangi</button>`;cnt($('[data-n]',box));return}
+  const [t,o,a]=Q[qi];delete box.dataset.l;
+  box.innerHTML=`<p class="qq">${qi+1}. ${t}</p>`+o.map((x,k)=>`<button class="op" data-k="${k}">${x}</button>`).join('');
+  box.onclick=e=>{const b=e.target.closest('.op');if(!b||box.dataset.l)return;box.dataset.l=1;const ok=+b.dataset.k===a;b.classList.add(ok?'ok':'no');if(ok){sc++;burst(800,420)}setTimeout(()=>{qi++;qz()},1300)}}
+
+function note(){const i=$('#rf'),v=i.value.trim();if(!v)return;const n=document.createElement('div');n.className='note';n.textContent=v;n.style.setProperty('--r',(Math.random()*8-4).toFixed(1)+'deg');$('#notes').appendChild(n);i.value='';burst(800,520)}
+
+// deck rendering and navigation
+const deck=$('#deck');
+deck.innerHTML=S.map((s,i)=>`<section class="sl ${s.c}" data-i="${i}">${s.h}</section>`).join('');
+const sec=$$('.sl'),dots=$('#dots');
+sec.forEach((_,i)=>{const d=document.createElement('i');d.onclick=()=>go(i);dots.appendChild(d)});
+let cur=-1,auto=false,timer=null;
+function go(i){i=(i+sec.length)%sec.length;if(i===cur)return;cur=i;
+  const w=$('#wp');w.classList.remove('run');void w.offsetWidth;w.classList.add('run');
+  sec.forEach((e,j)=>e.classList.toggle('on',j===i));
+  $$('[data-n]',sec[i]).forEach(cnt);$$('.tw',sec[i]).forEach(e=>tw(e));
+  if(INIT[S[i].k])INIT[S[i].k](sec[i]);
+  $$('#dots i').forEach((d,j)=>d.classList.toggle('on',j===i));
+  $('#cnt').textContent=String(i+1).padStart(2,'0')+' / '+String(sec.length).padStart(2,'0');
+  clearTimeout(timer);if(auto)timer=setTimeout(()=>go(cur+1),9000);}
+go(0);
+$('#pv').onclick=()=>go(cur-1);$('#nx').onclick=()=>go(cur+1);
+$('#au').onclick=e=>{auto=!auto;e.target.textContent='Auto: '+(auto?'nyala':'mati');if(auto)go(cur+1)};
+addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(cur+1)}if(e.key==='ArrowLeft')go(cur-1)});
+let tx=null;addEventListener('touchstart',e=>tx=e.touches[0].clientX);addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(cur+(dx<0?1:-1));tx=null});
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(+g.dataset.go);const f=e.target.closest('[data-f]');if(f)$$('.bk').forEach(b=>b.classList.toggle('dim',f.dataset.f!=='all'&&b.dataset.c!==f.dataset.f))});
+document.addEventListener('mouseover',e=>{$$('.fl').forEach(l=>l.setAttribute('stroke-width',3));const n=e.target.closest('.nd[data-i]');if(n){const l=$('.fl[data-i="'+n.dataset.i+'"]');if(l)l.setAttribute('stroke-width',8)}});
+
+function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);$('#frame').style.transform='translate(-50%,-50%) scale('+s+')'}
+addEventListener('resize',fit);fit();
+const fr=$('#frame');fr.addEventListener('mousemove',e=>{const r=fr.getBoundingClientRect();fr.style.setProperty('--mx',((e.clientX-r.left)/r.width-.5).toFixed(3));fr.style.setProperty('--my',((e.clientY-r.top)/r.height-.5).toFixed(3))});
+
+// particle background and bursts
+const cv=$('#fx'),X=cv.getContext('2d');let P=[],B=[];
+for(let i=0;i<70;i++)P.push({x:Math.random()*1600,y:Math.random()*900,vx:(Math.random()-.5)*.7,vy:(Math.random()-.5)*.7});
+function burst(x,y){for(let i=0;i<70;i++){const a=Math.random()*6.28,v=2+Math.random()*6;B.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c:Math.random()<.5?'#e10600':'#4fc3b8'})}}
+function fxl(){X.clearRect(0,0,1600,900);
+  P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>1600)p.vx*=-1;if(p.y<0||p.y>900)p.vy*=-1});
+  for(let i=0;i<P.length;i++){const a=P[i];X.fillStyle='#4fc3b8';X.fillRect(a.x,a.y,3,3);
+    for(let j=i+1;j<P.length;j++){const b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<150){X.strokeStyle='rgba(79,195,184,'+(1-d/150)+')';X.beginPath();X.moveTo(a.x,a.y);X.lineTo(b.x,b.y);X.stroke()}}}
+  B=B.filter(b=>b.l>0);B.forEach(b=>{b.x+=b.vx;b.y+=b.vy;b.vy+=.12;b.l-=.015;X.globalAlpha=b.l;X.fillStyle=b.c;X.fillRect(b.x,b.y,6,6);X.globalAlpha=1});
+  requestAnimationFrame(fxl)}
+fxl();
+
+// juz slider on the Faidhur Rahman slide
+document.addEventListener('input',e=>{if(e.target.id!=='jz')return;const v=+e.target.value;const r=$('.ring');if(r)r.style.strokeDashoffset=(691*(1-v/30)).toFixed(1);$('#jv').textContent=v;$('#jt').textContent='Anda melihat '+v+' dari 30 juz. Sekitar 13 juz ditulis sebelum beliau wafat.'});
+</script>
+</body></html>
